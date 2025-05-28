@@ -1,31 +1,41 @@
-import { useState, useContext } from "react";
+import { useState, useContext, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../context/Auth";
 
-const Header = ({ setSearchTitle }) => {
-  const [inputValue, setInputValue] = useState("");
+// Props tipi
+interface HeaderProps {
+  setSearchTitle?: (title: string) => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ setSearchTitle }) => {
+  const [inputValue, setInputValue] = useState<string>("");
+
   const navigate = useNavigate();
 
-  const { setAuth } = useContext(AuthContext) || {};
+  // AuthContext tipi
+  const authContext = useContext(AuthContext);
+  const setAuth = authContext?.setAuth;
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
-    setSearchTitle && setSearchTitle(value);
+    if (setSearchTitle) setSearchTitle(value);
   };
 
   const handleLogout = () => {
     localStorage.removeItem("key");
     localStorage.removeItem("secret");
     localStorage.removeItem("auth");
-    setAuth && setAuth(false);
+
+    if (setAuth) setAuth(false);
+
     navigate("/signin");
     toast.info("Logged out successfully!");
   };
 
   return (
-    <header className="text-white flex items-center px-6 py-3 rounded-bl-[80px] justify-between ">
+    <header className="text-white flex items-center px-6 py-3 rounded-bl-[80px] justify-between">
       <div className="flex gap-6 items-center">
         <div className="flex items-center space-x-2">
           <img src="/logo.svg" alt="Logo" className="w-[150px] h-[36px]" />

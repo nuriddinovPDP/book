@@ -1,5 +1,13 @@
-import { Navigate } from "react-router-dom";
+// src/components/PrivateRoute/PrivateRoute.tsx
 
-export function PrivateRoute({children, auth} = {}){
-    return auth? children : <Navigate to="/signin" />;
+import { Navigate } from "react-router-dom";
+import { ReactNode } from "react";
+
+interface PrivateRouteProps {
+  auth: boolean;
+  children: ReactNode;
 }
+
+export const PrivateRoute = ({ auth, children }: PrivateRouteProps) => {
+  return auth ? <>{children}</> : <Navigate to="/signin" />;
+};

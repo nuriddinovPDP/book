@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, ChangeEvent, FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/Auth";
 import { API } from "../../utils/config";
@@ -13,9 +13,16 @@ import {
 } from "@mui/material";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
+interface RegisterValues {
+  username: string;
+  password: string;
+  email: string;
+  confirmPassword: string;
+}
+
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [values, setValues] = useState({
+  const [values, setValues] = useState<RegisterValues>({
     username: "",
     password: "",
     email: "",
@@ -23,14 +30,14 @@ const Register = () => {
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { setAuth } = useContext(AuthContext);
+  const { setAuth } = useContext(AuthContext) as { setAuth: (value: boolean) => void };
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [e.target.id]: e.target.value });
     setError("");
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (values.password !== values.confirmPassword) {
       setError("Passwords do not match!");
@@ -135,7 +142,7 @@ const Register = () => {
         </form>
 
         <Typography textAlign="center" variant="body2" color="textSecondary">
-          Already signed up?{' '}
+          Already signed up?{" "}
           <Link to="/signin" style={{ color: "#7A00FF", textDecoration: "none" }}>
             Go to sign in.
           </Link>

@@ -9,7 +9,7 @@ import { PrivateRoute } from './components/PrivateRoute/PrivateRoute';
 import ErrorPage from './pages/ErorrPage/ErrorPage';
 
 function App() {
-  const { auth } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext) as { auth: boolean };
 
   const router = createBrowserRouter([
     {
@@ -27,16 +27,18 @@ function App() {
     {
       path: '/signup',
       element: <Register />,
-    },{
+    },
+    {
       path: '*',
-      element: <ErrorPage/>
-    }
-    
+      element: <ErrorPage />,
+    },
   ]);
 
-  return <div className='app'>
-    <RouterProvider router={router} />
-  </div> 
+  return (
+    <div className='app'>
+      <RouterProvider router={router} />
+    </div>
+  );
 }
 
 export default App;

@@ -3,11 +3,27 @@ import { Link } from "react-router-dom";
 import DeleteModal from "../DeleteModal/DeleteModal";
 import EditModal from "../EditModal/EditModal";
 
-function Book({ book, onDelete, fetchBooks }) {
+// Interfeyslar
+interface BookProps {
+  book: {
+    _id: string;
+    title: string;
+    cover: string;
+    pages: number;
+    published: string;
+    isbn: string;
+    author?: string;
+    status: number;
+  };
+  onDelete: (id: string) => void;
+  fetchBooks: () => void;
+}
+
+function Book({ book, onDelete, fetchBooks }: BookProps) {
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
 
-  const getStatusLabel = (status) => {
+  const getStatusLabel = (status: number) => {
     switch (status) {
       case 1:
         return <span className="bg-red-500 text-white px-3 py-1 rounded-[8.5px] text-sm">New</span>;
@@ -34,11 +50,11 @@ function Book({ book, onDelete, fetchBooks }) {
         onDelete={handleDelete}
       />
       <EditModal
-  open={showEdit}
-  close={() => setShowEdit(false)}
-  book={book}
-  fetchBooks={fetchBooks}
-/>
+        open={showEdit}
+        close={() => setShowEdit(false)}
+        book={book}
+        fetchBooks={fetchBooks}
+      />
 
       <div className="absolute z-10 top-3 -right-[34px] flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <button className="w-8 h-8" onClick={() => setShowDelete(true)}>

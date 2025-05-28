@@ -1,12 +1,29 @@
 import { useEffect, useState, useRef } from "react";
-import { API } from "../../utils/config"; // yo‘ling to‘g‘ri bo‘lishi kerak
+import { API } from "../../utils/config";
 import Book from "../Book/Book";
 import CreateModal from "../Modal/Modal";
 
-function Books({ searchTitle }) {
-  const [books, setBooks] = useState([]);
+// Kitob interfeýsi
+interface BookType {
+  _id: string;
+  title: string;
+  cover: string;
+  pages: number;
+  published: string;
+  isbn: string;
+  author?: string;
+  status: number;
+}
+
+// Props interfeýsi
+interface BooksProps {
+  searchTitle: string;
+}
+
+function Books({ searchTitle }: BooksProps) {
+  const [books, setBooks] = useState<BookType[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const ref = useRef(null);
+  const ref = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const getBooks = async () => {
     try {
@@ -17,7 +34,7 @@ function Books({ searchTitle }) {
     }
   };
 
-  const searchBooks = async (title) => {
+  const searchBooks = async (title: string) => {
     if (!title) {
       getBooks();
       return;
@@ -38,10 +55,12 @@ function Books({ searchTitle }) {
       searchBooks(searchTitle.trim());
     }, 5);
 
-    return () => clearTimeout(ref.current);
+    return () => {
+      if (ref.current) clearTimeout(ref.current);
+    };
   }, [searchTitle]);
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string) => {
     try {
       await API.delete(`/books/${id}`);
       setBooks((prev) => prev.filter((book) => book._id !== id));

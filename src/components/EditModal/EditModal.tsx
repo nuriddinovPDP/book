@@ -3,6 +3,7 @@ import { API } from "../../utils/config";
 import { toast } from "react-toastify";
 import { Modal, Box } from "@mui/material";
 
+// Book tipi
 interface Book {
   _id: string;
   title: string;
@@ -13,6 +14,7 @@ interface Book {
   status: number;
 }
 
+// Props tipi
 interface EditModalProps {
   open: boolean;
   close: () => void;
@@ -21,37 +23,40 @@ interface EditModalProps {
 }
 
 function EditModal({ open, close, book, fetchBooks }: EditModalProps) {
-  const [title, setTitle] = useState(book.title || "");
-  const [cover, setCover] = useState(book.cover || "");
-  const [pages, setPages] = useState(book.pages?.toString() || "");
-  const [publishedYear, setPublishedYear] = useState(
-    book.published ? new Date(book.published).getFullYear().toString() : ""
+  const [title, setTitle] = useState<string>(book.title);
+  const [cover, setCover] = useState<string>(book.cover);
+  const [pages, setPages] = useState<string>(book.pages.toString());
+  const [publishedYear, setPublishedYear] = useState<string>(
+    new Date(book.published).getFullYear().toString()
   );
-  const [isbn, setIsbn] = useState(book.isbn || "");
-  const [status, setStatus] = useState(book.status || 1);
-  const [loading, setLoading] = useState(false);
+  const [isbn, setIsbn] = useState<string>(book.isbn);
+  const [status, setStatus] = useState<number>(book.status);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async () => {
+    if (!title.trim() || !cover.trim() || !pages || !publishedYear || !isbn) {
+      toast.warning("Please fill in all the fields");
+      return;
+    }
+
     setLoading(true);
     try {
       const updatedBook = {
-        title,
-        cover,
+        title: title.trim(),
+        cover: cover.trim(),
         pages: Number(pages),
-        published: publishedYear
-          ? new Date(Number(publishedYear), 0, 1).toISOString()
-          : null,
-        isbn,
+        published: new Date(Number(publishedYear), 0, 1).toISOString(),
+        isbn: isbn.trim(),
         status,
       };
 
       await API.patch(`/books/${book._id}`, updatedBook);
       toast.success("Book updated successfully");
-      close();
       fetchBooks();
+      close();
     } catch (error) {
-      toast.error("Failed to update book");
       console.error(error);
+      toast.error("Failed to update book");
     } finally {
       setLoading(false);
     }
@@ -59,9 +64,7 @@ function EditModal({ open, close, book, fetchBooks }: EditModalProps) {
 
   return (
     <Modal open={open} onClose={close}>
-      <Box
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl p-6 w-[90%] max-w-md shadow-xl outline-none"
-      >
+      <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl p-6 w-[90%] max-w-md shadow-xl outline-none">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Edit Book</h2>
 
         <div className="space-y-4">
@@ -70,45 +73,40 @@ function EditModal({ open, close, book, fetchBooks }: EditModalProps) {
             placeholder="Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="input-field"
           />
-
           <input
             type="text"
             placeholder="Cover URL"
             value={cover}
             onChange={(e) => setCover(e.target.value)}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="input-field"
           />
-
           <input
             type="number"
             placeholder="Pages"
             value={pages}
             onChange={(e) => setPages(e.target.value)}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="input-field"
           />
-
           <input
             type="number"
             placeholder="Published Year"
             value={publishedYear}
             onChange={(e) => setPublishedYear(e.target.value)}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="input-field"
           />
-
           <input
             type="text"
             placeholder="ISBN"
             value={isbn}
             onChange={(e) => setIsbn(e.target.value)}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="input-field"
           />
-
           <select
             value={status}
             onChange={(e) => setStatus(Number(e.target.value))}
-            className="w-full border border-gray-300 rounded px-4 py-2 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="input-field text-gray-700"
           >
             <option value={1}>New</option>
             <option value={2}>Reading</option>
@@ -128,7 +126,7 @@ function EditModal({ open, close, book, fetchBooks }: EditModalProps) {
             disabled={loading}
             className="w-1/2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition disabled:opacity-50"
           >
-            Submit
+            {loading ? "Saving..." : "Submit"}
           </button>
         </div>
       </Box>
