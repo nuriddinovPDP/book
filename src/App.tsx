@@ -6,6 +6,7 @@ import { useContext } from 'react';
 import { AuthContext } from './context/Auth';
 import Home from './pages/Home/Home';
 import { PrivateRoute } from './components/PrivateRoute/PrivateRoute';
+import ErrorPage from './pages/ErorrPage/ErrorPage';
 
 function App() {
   const { auth } = useContext(AuthContext);
@@ -26,7 +27,10 @@ function App() {
     {
       path: '/signup',
       element: <Register />,
-    },
+    },{
+      path: '*',
+      element: <ErrorPage/>
+    }
     
   ]);
 
