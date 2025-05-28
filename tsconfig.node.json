@@ -20,7 +20,7 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-"allowSyntheticDefaultImports": true,
+
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
