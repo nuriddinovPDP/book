@@ -1,4 +1,4 @@
-import axios from "axios";
+import * as  axios from "axios";
 import CryptoJS from "crypto-js";
 
 export function setAuthData(userKey: string, userSecret: string): void {
@@ -20,7 +20,7 @@ function generateSign(
   return CryptoJS.MD5(signStr).toString();
 }
 
-export const API = axios.create({
+export const API = axios.default.create({
   baseURL: "https://lavina.onrender.com",
   headers: { "Content-Type": "application/json" },
 });
