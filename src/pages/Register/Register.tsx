@@ -1,4 +1,5 @@
-import { useState, useContext, ChangeEvent, FormEvent } from "react";
+import { useState, useContext } from "react"
+import type {ChangeEvent, FormEvent} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/Auth";
 import { API } from "../../utils/config";

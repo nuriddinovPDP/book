@@ -22,7 +22,7 @@ const Login = () => {
 
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { setAuth } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [e.target.id]: e.target.value });
@@ -40,7 +40,7 @@ const Login = () => {
 
       localStorage.setItem("key", res.data.data.key);
       localStorage.setItem("secret", res.data.data.secret);
-      setAuth(true);
+      if (authContext?.setAuth) authContext.setAuth(true);
       toast.success("Sign In successful!");
       navigate("/");
     } catch (err) {

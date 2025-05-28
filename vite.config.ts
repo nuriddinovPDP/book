@@ -1,7 +1,13 @@
 import { defineConfig } from 'vite'
-import tailwindcss from '@tailwindcss/vite'
+import react from '@vitejs/plugin-react' // agar React ishlatilsa
+import tailwindcss from 'tailwindcss'
+import autoprefixer from 'autoprefixer'
+
 export default defineConfig({
-  plugins: [
-    tailwindcss(),
-  ],
+  plugins: [react()],
+  css: {
+    postcss: {
+      plugins: [tailwindcss(), autoprefixer()],
+    },
+  },
 })

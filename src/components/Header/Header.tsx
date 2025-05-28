@@ -1,4 +1,6 @@
-import { useState, useContext, ChangeEvent } from "react";
+import { useState, useContext } from "react";
+import type { ChangeEvent } from "react";
+
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../context/Auth";
@@ -15,7 +17,6 @@ const Header: React.FC<HeaderProps> = ({ setSearchTitle }) => {
 
   // AuthContext tipi
   const authContext = useContext(AuthContext);
-  const setAuth = authContext?.setAuth;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -28,7 +29,7 @@ const Header: React.FC<HeaderProps> = ({ setSearchTitle }) => {
     localStorage.removeItem("secret");
     localStorage.removeItem("auth");
 
-    if (setAuth) setAuth(false);
+    if (authContext?.setAuth) authContext.setAuth(false);
 
     navigate("/signin");
     toast.info("Logged out successfully!");

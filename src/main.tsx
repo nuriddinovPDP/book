@@ -4,10 +4,15 @@ import './index.css'
 import App from './App.jsx'
 import { AuthProvider } from './context/Auth.jsx'
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
-  </StrictMode>,
-)
+const rootEl = document.getElementById('root');
+if (rootEl) {
+  createRoot(rootEl).render(
+    <StrictMode>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </StrictMode>,
+  );
+} else {
+  console.error("Root element not found");
+}

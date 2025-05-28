@@ -1,9 +1,19 @@
-import { createContext, useEffect, useState } from "react";
+// context/Auth.tsx
+import React, { createContext, useEffect, useState } from "react";
+import type { ReactNode } from "react";
+interface AuthContextType {
+  auth: boolean;
+  setAuth: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-export const AuthContext = createContext();
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState(() => {
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [auth, setAuth] = useState<boolean>(() => {
     const storedAuth = localStorage.getItem("auth");
     return storedAuth ? JSON.parse(storedAuth) : false;
   });

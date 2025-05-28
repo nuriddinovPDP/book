@@ -1,7 +1,7 @@
 // src/components/PrivateRoute/PrivateRoute.tsx
 
 import { Navigate } from "react-router-dom";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 interface PrivateRouteProps {
   auth: boolean;
